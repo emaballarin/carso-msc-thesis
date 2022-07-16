@@ -65,10 +65,24 @@
 
 \usepackage{microtype}
 
+\usepackage{hyperref}
+
+
+% Custom commands
+\newcommand{\npsection}[1]{\newpage \section{#1}}
+
 
 \begin{document}
 
     % Title page
     \include{titlepage.tex}
+
+    % T.o.C.
+    \include{toc.tex}
+
+    \npsection{Abstract}
+
+    Test!
+
 
 \end{document}
