@@ -13,11 +13,13 @@
 % University of Trieste, Italy
 %
 
+% !TeX spellcheck = en_GB
+
 
 \documentclass[a4paper, twoside]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[british]{babel}
+\usepackage[italian, main=british]{babel}
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{amsmath}
@@ -33,7 +35,7 @@
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{wrapfig}
 \usepackage{graphicx}
-\usepackage[british]{babel}
+\usepackage[italian, main=british]{babel}
 
 \input{insbox}
 
@@ -80,9 +82,17 @@
     % T.o.C.
     \include{toc.tex}
 
-    \npsection{Abstract}
+    % Abstract (English)
+    \include{abstract_en.tex}
 
-    Test!
+    % Abstract (Italian)
+    \include{abstract_it.tex}
+
+    % ...
+
+    % Bibliography & References
+    \include{biblio.tex}
+
 
 
 \end{document}
