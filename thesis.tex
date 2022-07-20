@@ -19,7 +19,8 @@
 \documentclass[a4paper, twoside]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[italian, main=british]{babel}
+\newcommand{\babelinit}{\usepackage[italian, main=british]{babel}}
+\babelinit
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{amsmath}
@@ -35,7 +36,7 @@
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{wrapfig}
 \usepackage{graphicx}
-\usepackage[italian, main=british]{babel}
+\babelinit   % Repeated, but necessary!
 
 \input{insbox}
 
@@ -46,6 +47,7 @@
 \usepackage{bm}
 \usepackage{xcolor}
 \usepackage[titletoc]{appendix}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
 \usepackage{upgreek}
 
 \pagestyle{fancy}
@@ -64,10 +66,17 @@
 \usepackage{lscape}
 \usepackage{setspace}\linespread{1.4}
 \usepackage{parskip}
+\usepackage{xcolor}
 
 \usepackage{microtype}
 
 \usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!44!black},
+    citecolor={blue!42!black},
+    urlcolor={blue!66!black}
+}
 
 
 % Custom commands
@@ -90,9 +99,6 @@
 
     % ...
 
-    % Bibliography & References
     \include{biblio.tex}
-
-
 
 \end{document}
