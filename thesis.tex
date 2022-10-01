@@ -12,6 +12,17 @@
 % Dept. of Mathematics and Geosciences
 % University of Trieste, Italy
 %
+%
+%
+% Latest version / working copy of this document: https://github.com/emaballarin/carso-msc-thesis
+%                                         mirror: https://git.sr.ht/~emaballarin/carso-msc-thesis
+%
+% Latest PDF of this document: https://github.com/emaballarin/carso-msc-thesis/actions/workflows/main.yml
+%
+% Companion code: https://github.com/emaballarin/CARSO
+%         mirror: https://git.sr.ht/~emaballarin/CARSO
+%
+%
 
 % !TeX spellcheck = en_GB
 
@@ -79,13 +90,14 @@
 }
 
 
-% Custom commands
+% Custom commands / shorthands
 \newcommand{\npsection}[1]{\newpage \section{#1}}
+\newcommand{\npsectionstar}[1]{\newpage \section*{#1}}
 
 
 \begin{document}
 
-    % Title page
+    % Frontpage
     \include{titlepage.tex}
 
     % T.o.C.
@@ -98,10 +110,36 @@
     \include{abstract_it.tex}
 
     % Introduction
-    %\include{intro.tex}
+    \include{intro.tex}
 
-    % ...
+    % Problem Specification
+    \include{problemspec.tex}
 
+    % Adversarial Robustness
+    \include{advrob.tex}
+
+    % Related Works and Prior Art
+    \include{related_prior.tex}
+
+    % Neuroscience as an Inspiration
+    \include{neurostuff.tex}
+
+    % Our Proposal
+    \include{CARSO.tex}
+
+    % Experimental Evaluation
+    \include{experiments.tex}
+
+    % Conclusion
+    \include{concl.tex}
+
+    % Future Work
+    \include{futurework.tex}
+
+    % Bibliography
     \include{biblio.tex}
+
+    % Acknowledgements
+    \include{ack.tex}
 
 \end{document}
