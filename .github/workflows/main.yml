@@ -1,4 +1,4 @@
-name: Build LaTeX
+name: PDF from LaTeX
 on:
   push:
     branches: [ "main" ]
@@ -10,8 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Get current date/time
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y_%m_%d-%H_%M_%S')"
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
           root_file: thesis.tex
+      - name: Rename PDF
+        run: mv thesis.pdf EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
+      - name: Upload PDF as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}
+          path: EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
