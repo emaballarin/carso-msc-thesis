@@ -18,10 +18,16 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: thesis.tex
-      - name: Rename PDF
-        run: mv thesis.pdf EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
-      - name: Upload PDF as artifact
+      - name: Copy-rename PDF
+        run: cp thesis.pdf EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
+      - name: Upload PDF as artifact (versioned)
         uses: actions/upload-artifact@v3
         with:
           name: EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}
           path: EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
+      # For easier use with https://nightly.link
+      - name: Upload PDF as artifact (unversioned, latest)
+        uses: actions/upload-artifact@v3
+        with:
+          name: EmanueleBallarin_MScThesis_CARSO_latest
+          path: EmanueleBallarin_MScThesis_CARSO_latest.pdf
