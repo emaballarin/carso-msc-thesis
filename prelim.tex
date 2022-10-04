@@ -2,4 +2,44 @@
 
 \npsection{Preliminaries}
 
-The aim of the section that follows is to provide...
+The aim of the section that follows will be to provide the essential elements of knowledge whose use will be abundant in, and required to better appreciate, the forthcoming -- while also favouring the contextualisation of novel contributions within the broader field of \textit{deep learning}, and that of \textit{adversarial defences} specifically. As such, with no pretence of exhaustiveness, the following pages will focus chiefly on a high-level conceptual overview, along a \textit{drill-down} from the goals of \textit{artificial intelligence} down towards the very specific problem and use-case considered.
+
+
+\subsection{ML $\subseteq$ AI}
+
+\textit{Artificial Intelligence} is usually defined as the field that studies tools and methods capable of reproducing higher-level cognitive functions. \textit{I.e.} rational and autonomous reasoning, decision-making and agency, and/or adaptation to complex or previously unseen scenarios. As such, it is an area that lies over a broad variety of disciplines and approaches: from computer science and mathematics, to psychology and philosophy.
+
+The core gnosiological underpinning from which \textit{Machine Learning} and \textit{Deep Learning} move (called \textit{computational cognitivism}) posits that the previously mentioned goals of \textit{Artificial Intelligence} may be reached by reduction to -- though arbitrarily rich and complex -- algorithmic computation: thanks to the tools of mathematical formalisation and statistical-probabilistic reasoning as a way to quantify and operate under uncertainty.
+
+\textit{Machine Learning} can then be defined as the set of rigorous mathematical techniques (spanning \textit{modelling}, \textit{algorithmics}, \textit{statistical/probabilistic learning theory}, optimisation) leading to the development of algorithms (called indeed \textit{learning algorithms}) to extract information from \textit{experience} (provided in the form of \textit{data}) without being explicitly programmed to execute the specific task \textit{learned}\footnote{Such popular definition of \textit{ML} comes from a rephrased quote from \cite{Samuel1959MachineLearning} -- whose author also helped the development of \TeX, the typesetting system which this thesis has been composed with.}.
+
+In a more measurable fashion\footnote{Such definition is attributed to Tom Mitchell.}:
+
+\begin{displayquote}
+    \textit{A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.}
+\end{displayquote}
+
+Specifically, in order to have \textit{program} show such kind of behaviour at a given task, it is necessary for the \textit{learning algorithm} itself to learn from the data a \textit{mathematical model} of the essential phenomena involved in the fulfilment of the task -- and whose use allows for its (eventually approximate) further execution, even on unseen input data. This clarification allows -- in theory -- to decouple the machine learning \textit{model} from the \textit{learning} (and potentially \textit{inference}) \textit{algorithm} used to determine its determining parameters.
+
+\subsubsection{Minimal systematics}
+At this point, one can preliminarily classify the (extremely varied, and often not clear-cut) landscape of machine learning tasks (and related algorithms) according to the amount of \textit{supervision} required by the learning, or with respect to the probability distribution the \textit{model} is tasked to learn.
+
+The former discrimination allows us to define:
+\begin{itemize}
+    \item \textit{Supervised} learning tasks, requiring an input/output mapping to be learned from a \textit{training} dataset of knowingly-correct pairs of the same kind (\textit{e.g.} image classification);
+    \item \textit{Unsupervised} learning, where data are provided as input and properties or transformations of them are required to be learned without further exemplification of the output (\textit{e.g.} dimensionality reduction);
+    \item \textit{Reinforcement learning}, involving the determination of the optimal actions (among many) to be taken according to the state the \textit{agent} and the \textit{environment} are -- by utilising only a \textit{reward function} and eventually under the further constraint of partial state observability and outcome nondeterminism.
+\end{itemize}
+
+Whereas, according to the latter description, we can have:
+\begin{itemize}
+    \item \textit{Generative} learning, dedicated to the modelling of the full data-generating distribution, \textit{i.e.} $p(x)$ in the case of inputs only, or the joint $p(x,y)$ in the case of input/output pairs -- or some property or transformation of them;
+    \item \textit{Discriminative} learning, dealing with the less informative conditional model of $p(y|x)$ -- or some statistic of it -- in the case of input/output pairs.
+\end{itemize}
+
+\subsection{Deep Learning}
+
+Given the above, one can simply define \textit{deep learning} as a subset of \textit{machine learning} -- whose models are \textit{deep artificial neural networks} (whose precise nature will be right introduced).
+
+\subsubsection{From artificial neurons to deep networks}
+Pippo

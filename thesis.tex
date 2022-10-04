@@ -55,6 +55,10 @@
 \usepackage[font=small,font=it]{caption}
 \usepackage{geometry}\geometry{top=3.25cm,bottom=3cm,left=3cm,right=3cm}
 
+\usepackage{tocloft}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
 \usepackage{fancyhdr}
 \usepackage{bm}
 \usepackage{xcolor}
@@ -89,6 +93,9 @@
     citecolor={blue!42!black},
     urlcolor={blue!66!black}
 }
+
+\usepackage[hang]{footmisc}
+\setlength\footnotemargin{8pt}
 
 
 % Custom commands / shorthands
