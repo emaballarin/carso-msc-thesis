@@ -19,7 +19,9 @@ jobs:
         with:
           root_file: thesis.tex
       - name: Copy-rename PDF
-        run: cp thesis.pdf EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
+        run: |
+          cp thesis.pdf EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
+          mv thesis.pdf EmanueleBallarin_MScThesis_CARSO_latest.pdf
       - name: Upload PDF as artifact (versioned)
         uses: actions/upload-artifact@v3
         with:
