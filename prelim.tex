@@ -41,5 +41,78 @@ Whereas, according to the latter description, we can have:
 
 Given the above, one can simply define \textit{deep learning} as a subset of \textit{machine learning} -- whose models are \textit{deep artificial neural networks} (whose precise nature will be right introduced).
 
-\subsubsection{From artificial neurons to deep networks}
-Pippo
+\subsubsection{From artificial neurons...}
+
+The essential building block of an \textit{artificial neural network} -- being it \textit{shallow} or \textit{deep} -- is the \textit{artificial neuron}. Though not a proper model of its biological counterpart -- unless at a very high, conceptual level -- its structure was loosely inspired\footnote{See \cite{McCullochPitts1990ALC} and \cite{Rosenblatt1958ThePA}} by the dendritic and axonal connectivity of neurons in a biological brain, abstracting away the differentiations that may occur.
+
+From a mathematical modelling viewpoint, an \textit{artificial neuron} is just an affine vector-to-scalar transformation followed by a (usually, except in the trivial case) nonlinear function, called \textit{activation}.
+
+\textit{i.e.}
+
+$$y = \mathcal{N}_1(\vec{x}) = \mathcal{A}(b + \vec{w} \cdot \vec{x})$$
+
+with, in the most general setting $y \in \mathbb{R}$ (the output), $\vec{x} \in \mathbb{R}^n$, $n \in \mathbb{N}_{\setminus0}$ (the vector input, also viewable as an ordered collection of scalar inputs, \textit{e.g.} the outputs of other \textit{neurons}). In such case, the activation $\mathcal{A}: \mathbb{R} \rightarrow \mathbb{R}$ and the model \textit{parameters} $b \in \mathbb{R}$ (\textit{bias}) and $\vec{w} \in \mathbb{R}^n$ (weights) -- to be learned, eventually -- fully define the model. In the usual scenario, the choice of $\mathcal{A}$ is not to be learned, but still its fixed functional form may depend on additional learnable parameters.
+
+\subsubsection{...to deep artificial neural networks}
+
+If we consider, at this point, a group of $N_{\ell}$ ordered (and distinct) neurons $\mathcal{N}_i$ and provide them the same vector $\vec{x}$ as input, we obtain as output $y_i = \mathcal{N}_i(\vec{x}) = \mathcal{A}_i(b_i + \vec{w}_i \cdot \vec{x})$ for $i \in \{1, \dots, N_{\ell}\}$, which we can rearrange as a vector $\vec{y}$. The transformation mapping $\vec{x}$ into $\vec{y}$ can be directly modelled by means of matrix-vector multiplication, thus defining a new mathematical device, called \textit{linear (neural network) layer}:
+
+$$\vec{y} = L(\vec{x}) = \mathcal{A}(\vec{b} + \mat{W}\vec{x})$$
+
+with $\vec{y}, \vec{b} \in \mathbb{R}^m$, $\vec{x} \in \mathbb{R}^n$, $m,n \in \mathbb{N}_{\setminus0}$ and $\mat{W}$ an adequately-defined $m \times n$ matrix. In this case, $\mathcal{A}: \mathbb{R}^m \rightarrow \mathbb{R}^m$ is usually (but not always\footnote{See \cite{Xiao2020Enhancing} as a refreshing example of such kind.}!) just an elementwise application of the same scalar function.
+
+By considering again a group of $N$ ordered (and distinct) \textit{layers} -- the $j^{\text{th}}$ of which taking as input the output of the $(j-1)^{\text{th}}$ -- we can finally define an \textit{N-layers deep fully-connected feedforward\footnote{\label{graphrepr}Given the absence of \textit{loops} in the (oriented) graph-based representation of the network. There, pre-activations are represented at the \textit{neuron} level one scalar per node; outgoing edges imply the application of the \textit{activation function} and multiplication with the scalar weight, whereas incoming edges, summation. Biases are encoded by the weight of additional edges with constant unit output. The set of all neurons with edges incoming into another (excluding biases) are called \textit{receptive field} of the latter.} artificial neural network} $\mathcal{N}_N$ as:
+
+$$\mathcal{N}_N(\vec{x}) = L_N(L_{N-1}(\dots (L_2(L_1(\vec{x}))))) \text{ .}$$
+
+The output (or \textit{post-activation}) of the $j^{\text{th}}$ layer (\textit{i.e.} $\vec{r_j} = L_j(\vec{r_{j-1}})$) -- or, according to a different convention, its \textit{pre-activation} (\textit{i.e.} $\vec{b_j} + \mat{W_j}\vec{r_{j-1}}$) -- is given the name of \textit{$j^{\text{th}}$-layer representation}. The same naming convention can be scaled down at the neuron level, or up to an entire network (by considering the ordered representations of all composing layers/neurons).
+
+Additionally, all the weights and biases of an artificial neural network (considered as part of an ordered collection) are called -- as in the general statistical, \textit{ML}, or modelling setting -- \textit{parameters} of the model; on the other hand, all the additional characterizing elements described by a quantitative choice (or even non-quantitative, \textit{lato sensu}) among many options -- not meant to be learned -- are called \textit{hyperparameters} (among which, \textit{e.g.}, the number of layers -- also called \textit{depth} of the network -- or the output size of each \textit{layer}).
+
+\subsubsection{A whole \textit{bestiary} of networks and \textit{universal approximation}}
+
+At this point, one may ask whether \textit{fully-connected feedforward artificial neural networks (FCNs)} are an adequate model to approximate the transformation of the inputs required by the task to be learned -- or if other kinds of similar models are available (and more appropriate).
+
+As far as the latter question is concerned -- even if not strictly required for the prosecution of the present work -- many variations have been proposed since the first \textit{neural models}. Some of these operate at the level of \textit{single neurons} -- \textit{e.g.} by changing the way incoming inputs in the graph-representation (see: {\ref{graphrepr}}) of the network are handled, as in \textit{spiking neural networks}; others change the layer-wide behaviour -- \textit{e.g.} by structuring neuron connectivity and enforcing weight-sharing, as in \textit{convolutional neural networks} Others more change the connectivity of the network in ways that go beyond single layers (as in \textit{recurrent} or \textit{graph} \textit{neural networks}, where -- among other differences -- \textit{e.g.} \textit{feedbacks} are possible). Some of these cases -- and definitely others -- also require (or actually propose, as the only modification) a different \textit{learning algorithm}\footnote{The main \textit{learning algorithm} for deep neural models will be discussed in the following section.} to be employed \wrt already established choices.
+
+Surely -- and beyond the simple variation of hyperparameters -- ever new artificial neural models are routinely developed within deep learning research and practice, by variously composing already established ones (\textit{i.e.} considering the outputs, or even more generally the representations or the parameters, of a network as the input of another), and by likewise adopting different training or inference strategies\footnote{Of this latter kind is main element of novelty of this thesis.}.
+
+The adequacy of deep learning models to approximate a given map linking inputs and outputs of interest -- and specifically whether such approximation can be learned (and how!) from examples -- is a vast subject with rarely clear-cut answers, constantly evolving and attracting renovated research interest.
+
+The main results so far -- known as \textit{universal approximation theorems} -- establish for a given \textit{artificial neural architecture}, seen as a family of algorithmically-generated functions parametrized by its weights and biases, their density within a function space of interest. Originally mostly focused on \textit{feedforward} architectures of fixed depth at the increase of width, spaces of continuous functions between Euclidean spaces, and the notion of \textit{density} induced by uniform convergence within compact sets -- over the years many extensions to such theorems have been proposed and proven (most notably in the case of fixed width and increasing depth, and for a variety of commonly used neural architectures such as \textit{convolutional neural networks} or those with a wide class of activation functions or subject to specific constraints).
+
+In any case -- though the striking expressive power of deep artificial neural networks is undoubtedly confirmed by experimental results -- such theorems are almost always \textit{existence} ones, without providing a direct way of determining the (hyper)parameters actually approximating a given function within stated tolerance. Within the frame just described, the practical determination of such latter (hyper)parameters has largely been an empirical science -- relying upon clever modelling choices (\textit{e.g.} the choice of \textit{inductive biases} -- \textit{i.e.} the properties of specific architectures \wrt the input/output mapping produced), the development of ever more effective learning algorithms, and always experimental evaluation.
+
+It will go beyond the scope of this thesis to discuss in further \textit{depth} or \textit{width} the current state of research in the field. Some cornerstone results are contained in \cite{HornikEtAl1989Approx}, \cite{Hornik1991Approx}, \cite{LinEtAl2018Approx}, \cite{KidgerLyons2020Approx} and \cite{Xu2018ApproxGNN}.
+
+
+\subsubsection{\textit{Actually learning} in Deep Learning}
+
+We introduced \textit{deep learning} as a subset of \textit{machine learning} -- however, we have so far outlined just the \textit{modelling} part of it, and briefly mentioned some formal guarantees whose transfer into practice is hardly possible. How can we \textit{automatically} learn the the parameters of a deep learning model capable of approximately performing a given task (or at least give us the reasonable expectation it can) -- only from inputs (\textit{e.g.} in the case of unsupervised learning) or input/output pairs (\textit{e.g.} in the case of supervised learning)?
+
+The answer is, in principle, exactly equivalent to that typical of \textit{traditional} numerical function approximation, or statistical model fitting.
+
+Given a deep artificial neural network $\netw{N}$, we first define an adequate \textit{loss function} -- that should encode the degree of success with which the model is capable of solving the chosen task, and whose value generally depends on inputs and parameters (usually, but not exclusively, through $\netw{N}$) and, in the case of supervised learning, on the outputs. Then, we minimize the \textit{loss}, optimizing \wrt the parameters, while evaluating it on the given \textit{training data}.
+
+More precisely, calling $\vec{\theta}$ the collection of weights and biases for the entire model $\netw{N}$, and $\mathcal{L}$ the chosen loss function, we seek the optimal parameters
+
+$$\vec{\theta^*} \coloneqq \argmin_{\vec{\theta}} \mathcal{L}_{\netw{N}}(\vec{x}, \vec{y} | \vec{\theta}) \fullstop$$
+
+Such simple formulation, however, hides one of the most relevant differences between deep learning and more traditional \textit{(approximate) model fitting} approaches: the parameter space can be extremely high-dimensional\footnote{\textit{E.g.}, among the largest \textit{deep neural models} to date, Google's \texttt{GLaM} -- see \cite{DuEtAl2022GLaM} -- boasts $>1$ trillion learnable parameters!}, and the \textit{loss landscape} -- \textit{i.e.} $\mathcal{L}(\vec{\theta})$ -- highly nonconvex, \textit{rugged}, with abundant of local minima and/or saddle points\footnote{For an impactful visualization, see \cite{LiEtAl2018VisualizingLL}.}. This rules out any direct global optimization approach, for problems beyond \textit{toy examples}.
+
+Though not necessarily the \textit{only} choice -- the almost-totality of learning algorithms for deep neural models is based upon \textit{gradient descent iterations}, \textit{i.e.} the approximation $\vec{\theta^*} \approx \vec{\theta_{\hat{i}}}$ for a sufficiently large $\hat{i}$, and the following iteration:
+$$ \vec{\theta_{i+1}} \leftarrow  \vec{\theta_{i}} - \lambda\vec{g_i}$$
+
+with $\lambda \in \mathbb{R}_+$ (\textit{learning rate}) and $\vec{g_i} \coloneqq \left.\frac{\ddiff{\mathcal{L}(\vec{\theta})}}{\ddiff{\vec{\theta}}} \right|_{\vec{\theta_{i}}}$ (\textit{local gradient}).
+
+The exact dependence of $\mathcal{L}$ from $\vec{x}$ directly relates to the specific choice of an \textit{aggregation scheme} for the elementwise $\vec{\theta_{i}}$-gradients computed for each datapoint available.
+
+Let us suppose the usual \textit{supervised learning} setting, with $\{(\vec{x_i}, \vec{y_i})\}_{i = \{1,2,\dots,N\}}$ as the \textit{training dataset}. $\vec{g_i}$ iterations can then be defined as\footnote{An equivalent formulation is also possible -- with summation replaced by averaging of the gradients -- implying a rescaling of the learning rate.}
+
+$$\vec{g_i} \coloneqq \sum_{k \in \mathcal{B}_j \subseteq \{1,2,\dots,N\}}{\left.\frac{\ddiff{\mathcal{L}(\vec{x_k}, \vec{y_k}|\vec{\theta})}}{\ddiff{\vec{\theta}}} \right|_{\vec{\theta_{i}}}}$$
+
+with simultaneous updates of $i$ and $j$ (\textit{i.e.} for two consecutive iterations, summation is performed on different $\mathcal{B}_j$s), and $\bigcup_j\mathcal{B}_j$ a partition of the (generally shuffled) $\{1,2,\dots,N\}$.
+
+The various $\{(\vec{x_i}, \vec{y_i})\}_{i \in \mathcal{B}_j}$s are called \textit{(mini)batches} of the dataset, and their size (fixed, except eventually for last one) $B$ (\textit{batch size}) is such that $\#\text{batches} = \lceil \frac{N}{B}\rceil$ -- whereas the corresponding $\vec{g_i}$s are called \textit{noisy local gradients} in case $B \neq 1$ (as it is, indeed, a \textit{noisy estimate} of the actual \textit{local gradient}).
+
+The choice of $B$ and $\lambda$ (which are additional \textit{hyperparameters}, of the learning algorithm this time) can influence the convergence of the iterations. While it is true that \textit{noisy gradient} iterations approximate those of true gradients as $i$ grows, the choice of a larger $B$ (up to the limit $B=N$, called \textit{(full) batch gradient descent}) reduces the variance of the estimate at the cost of increased susceptibility to convergence toward local minima. On the other hand, a decrease in $B$ (down to $B=1$, \textit{stochastic gradient descent}\footnote{Note, however, that such name is commonly used in practice to describe the whole family of these optimization methods, regardless of the choice of $B$.}) favours convergence toward the global minimum at the price of increased variance and number of iterations required to reach it. The number of times the training set (in the form of batches, eventually) is entirely used during training is called \textit{number of epochs}. Ultimately, the choice of \textit{batch size} in modern day boils down to the compromise between \textit{regularization} of the optimization problem and (reduction in) the number of iterations potentially required for proper convergence -- provided in any case sufficient memory to store the whole minibatch\footnote{While it is always possible to resort to \textit{gradient accumulation} to counter memory starvation (see \href{https://discuss.pytorch.org/t/why-do-we-need-to-set-the-gradients-manually-to-zero-in-pytorch/4903/20}{this forum comment by one of the PyTorch developers} as an explanatory example), a memory-fittable alternative has to be preferred, due to the non-summability of \textit{batch normalization} statistics. The analysis of such regularization technique will be discussed right next.}.

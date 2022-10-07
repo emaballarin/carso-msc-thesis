@@ -18,7 +18,8 @@
 %                                         mirror: https://git.sr.ht/~emaballarin/carso-msc-thesis
 %
 % Latest PDF of this document: https://github.com/emaballarin/carso-msc-thesis/actions/workflows/main.yml
-%                 direct link: https://nightly.link/emaballarin/carso-msc-thesis/workflows/main/main/EmanueleBallarin_MScThesis_CARSO_latest.zip
+%                 direct link: https://ballarin.cc/cdn/carso_msc_thesis (meta-refresh support required)
+%   direct link (alternative): https://cutt.ly/EmanueleBallarin_MScThesis_CARSO_latest
 %
 % Companion code: https://github.com/emaballarin/CARSO
 %         mirror: https://git.sr.ht/~emaballarin/CARSO
@@ -98,9 +99,20 @@
 \setlength\footnotemargin{8pt}
 
 
-% Custom commands / shorthands
+% Typesetting / pagination shorthands
 \newcommand{\npsection}[1]{\newpage \section{#1}}
 \newcommand{\npsectionstar}[1]{\newpage \section*{#1}}
+
+% Technical shorthands
+\renewcommand{\vec}[1]{\bm{#1}}
+\newcommand{\mat}[1]{\bm{#1}}
+\newcommand{\netw}[1]{\mathcal{#1}}
+\newcommand{\wrt}{\textit{w.r.t.\ }}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\fullstop}{\text{ .}}
+\newcommand{\ddiff}[1]{\mathop{d#1}}
+\newcommand{\dpart}[1]{\mathop{\partial#1}}
 
 
 \begin{document}
