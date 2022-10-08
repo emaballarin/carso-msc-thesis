@@ -122,8 +122,8 @@ The choice of $B$ and $\lambda$ (which are additional \textit{hyperparameters}, 
 
 Finally, it must be stressed that \textit{optimization} plays a crucial role in the \textit{learning algorithm} of a deep neural architecture: for that reason, many variations of the prototypical iteration described in (\ref{eq:1}) have been proposed. Chiefly -- they augment such iteration with additional \textit{iteration variables} (and subsequent additive terms to the gradient) in order to better exploit \textit{greater-than-first} order information about the \textit{loss landscape} and thus provide faster and/or more accurate convergence to the \textit{true} global minimum. An explicative description of such proposals beyond mere elencation is again out of the scope of this work: apart from the ubiquitous \textit{stochastic gradient descent with momentum}\footnote{An explanation of the algorithm is given \textit{e.g. \href{https://paperswithcode.com/method/sgd-with-momentum}{here}}.}, \texttt{Adam}\footnote{See \cite{KingmaBa2015Adam}. Also, \texttt{Adam} is the basis for the main optimizer used in the learning protocol proposed by this work -- \texttt{RAdam} (see \cite{LiuEtAl2020OnTheVariance}).} is one of the most relevant and used variations.
 
-\subsubsection{Regularization strategies}
+\subsubsection{Overparameterization Regularization strategies}
 
-As we have anticipated earlier, ...
+As we have anticipated earlier, the number of parameters of a deep neural model can be even extremely large -- usually
 
 \subsection{\textit{Adversarial Robustness} (and lack thereof)}
