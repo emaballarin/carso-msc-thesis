@@ -161,4 +161,6 @@ The core ingredient seamless allowing such kind of computations is (collectively
 
 Finally, in order to ensure computational efficiency for the whole process, the \textit{error backpropagation} algorithm is employed -- guaranteeing that the term $\vec{g_i}$ is computed linearly in the number of parameters \wrt the number of atomic differentiation operations. This comes possible thanks to the graph-based representation of a neural architecture, the application of the \textit{chain rule of differentiation} (by noting that in a \textit{multilayer} architecture the derivatives of representations at layer $i$ only depend from at most all the representations of layer $i-1$), and the \textit{memoisation} of such derivatives during the computations required by those of the innermost layer. Such approach to the computation of the entire $\frac{\partial\mathcal{L}(\vec{\theta})}{\partial\vec{\theta}}$ Jacobian from a reverse network-graph traversal (and the relevant related data structures built upon it) is called \textit{reverse-mode automatic differentiation} and powers the large majority of modern deep learning libraries.
 
+\subsubsection{Advanced topics in \textit{deep learning}}
+
 \subsection{\textit{Adversarial Robustness} (and lack thereof)}
