@@ -108,7 +108,7 @@ Though not necessarily the \textit{only} choice -- the almost-totality of learni
 
 with $\lambda \in \mathbb{R}_+$ (\textit{learning rate}) and $\vec{g_i} \coloneqq \left.\frac{\ddiff{\mathcal{L}_{\netw{N}}(\vec{\theta})}}{\ddiff{\vec{\theta}}} \right|_{\vec{\theta_{i}}}$ (\textit{local gradient}).
 
-The exact dependence of $\mathcal{L}_{\netw{N}}$ from $\vec{x}$ directly relates to the specific choice of an \textit{aggregation scheme} for the elementwise $\vec{\theta_{i}}$-gradients computed for each datapoint available.
+The exact dependence of $\vec{g_i}$ from $\vec{x}$ directly relates to the specific choice of an \textit{aggregation scheme} for the elementwise $\vec{\theta_{i}}$-gradients computed for each datapoint available.
 
 Let us suppose the usual \textit{supervised learning} setting, with $\{(\vec{x_i}, \vec{y_i})\}_{i = \{1,2,\dots,N\}}$ as the \textit{training dataset}. $\vec{g_i}$ iterations can then be defined as\footnote{An equivalent formulation is also possible -- with summation replaced by averaging of the gradients -- implying a rescaling of the learning rate.}
 
@@ -161,6 +161,22 @@ The core ingredient seamless allowing such kind of computations is (collectively
 
 Finally, in order to ensure computational efficiency for the whole process, the \textit{error backpropagation} algorithm is employed -- guaranteeing that the term $\vec{g_i}$ is computed linearly in the number of parameters \wrt the number of atomic differentiation operations. This comes possible thanks to the graph-based representation of a neural architecture, the application of the \textit{chain rule of differentiation} (by noting that in a \textit{multilayer} architecture the derivatives of representations at layer $i$ only depend from at most all the representations of layer $i-1$), and the \textit{memoisation} of such derivatives during the computations required by those of the innermost layer. Such approach to the computation of the entire $\frac{\partial\mathcal{L}(\vec{\theta})}{\partial\vec{\theta}}$ Jacobian from a reverse network-graph traversal (and the relevant related data structures built upon it) is called \textit{reverse-mode automatic differentiation} and powers the large majority of modern deep learning libraries.
 
-\subsubsection{Advanced topics in \textit{deep learning}}
+\subsubsection{\textit{(more)} Advanced topics in \textit{deep learning}}
+
+To conclude the overview of preliminary knowledge used in the portion of work that follows, this section will present some -- selected -- fundamental principles and results taken from deep learning theory or practice, with no goal of completeness. Such abridged exposition -- at the cost of partiality -- represents though the collection of core underpinnings on which our novel proposal is based, as opposed to the easy misconception of it being just a \textit{random sample} of tricks and fortuitous consequences.
+
+\paragraphnl{\textit{Deep Learning} as \textit{homoiconic} approximate probabilistic programming}
+Even though the previous sections may have given the impression of deep learning as a field composed of mostly disjoint techniques and \textit{architectures}, remarkable synergy among all different \textit{moving parts} is one of its most distinguishing elements. To the point that its development and use -- a concept spearheaded since 2018 by one of its pioneers, Yann LeCun -- can even be viewed through a \textit{fresh} lens as a mostly compositional activity, in a similar spirit as organic synthesis or computer programming. Indeed, such latter analogy -- that of a set of pre-constituted patterns (\textit{e.g.} constructs such as \textit{declarations of variables}, \textit{typing}, \textit{conditional statements}, structuring in \textit{functions} or \textit{objects}, use of design patterns, \textit{...}) each with self-standing dignity and theoretical justification, but variously and cleverly extended, assembled, and vetted as a new whole -- is also a remarkably clear high-level description of the \textit{true nature} of modern deep learning: the composition of transformations between real-valued, (usually high-dimensional) vector spaces -- whose very nature is learnt through optimization of an adequate metric -- of which the \textit{entry-} and \textit{exit-} \textit{points} may be the actual training or inference data, but whose internal representations and dominant ingredients are \textit{probability distributions} or surrogates thereof.
+
+This description, together with the realisation that, indeed, such \textit{learnably-parametrized} transformations may be able to naturally transform \textit{end-to-end} inputs into outputs in ultimately an approximately same way \textit{traditional} computer programs do\footnote{And even \textit{Turing-completely} so; see \textit{e.g.} \cite{PerezEtAl2018Turing}.}, allows to properly frame deep learning as an adaptive platform for example-driven programming that is both \textit{homoiconic}\footnote{\textit{I.e.} such that the \textit{program} is at the same time represented in terms of (some of) its \textit{primitive types} -- either \textit{parameters} or \textit{representations} in the case of deep learning, when not even both.} and able to express uncertainty probabilistically, yet within a finite, well-defined description.
+
+Additionally, such viewpoint leads remarkably close to \textit{neural computation} in biological systems, where a similar framing of the field is offered in terms of (biological) neurons capable of plastic analogue processing of frequency-coded electrical stimuli (with the astounding and tangible result that cognition, indeed, is!) -- further strengthening the connections\footnote{Pun involuntarily intended.} of deep learning with its original motives.
+
+\paragraphnl{\textit{Auto-encoders}: compressing via reconstruction}
+
+
+
+\paragraphnl{Learning distributions by \textit{auto-encoding} sampled data}
+
 
 \subsection{\textit{Adversarial Robustness} (and lack thereof)}
