@@ -40,7 +40,8 @@
 \usepackage{mathtools}
 \usepackage{wrapfig}
 \usepackage{amsfonts}
-\usepackage{csquotes}
+\usepackage[autostyle]{csquotes}
+\MakeOuterQuote{"}
 \usepackage{epigraph}
 \usepackage{float}
 \usepackage{graphicx,wrapfig,lipsum}
@@ -104,16 +105,21 @@
 \newcommand{\npsectionstar}[1]{\newpage \section*{#1}}
 
 % Technical shorthands
-\renewcommand{\vec}[1]{\bm{#1}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\cardof}[1]{|#1|}
+\newcommand{\condon}{|}
+\newcommand{\ddiff}[1]{\mathop{d#1}}
+\newcommand{\dimof}[1]{\text{dim}(#1)}
+\newcommand{\dpart}[1]{\mathop{\partial#1}}
+\newcommand{\fullstop}{\text{ .}}
 \newcommand{\mat}[1]{\bm{#1}}
 \newcommand{\netw}[1]{\mathcal{#1}}
-\newcommand{\wrt}{\textit{w.r.t.\ }}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\newcommand{\fullstop}{\text{ .}}
-\newcommand{\ddiff}[1]{\mathop{d#1}}
-\newcommand{\dpart}[1]{\mathop{\partial#1}}
+\newcommand{\normof}[1]{||#1||}
 \newcommand{\paragraphnl}[1]{\paragraph{#1}\mbox{}\\}
+\newcommand{\suchthat}{\textit{s.t.\ }}
+\newcommand{\wrt}{\textit{w.r.t.\ }}
+\renewcommand{\vec}[1]{\bm{#1}}
 
 
 \begin{document}

@@ -134,7 +134,7 @@ As we have anticipated earlier, the number of parameters of a deep neural model 
 Still, the deliberate modelling choice of employing a number of parameters (much) larger than reasonably estimable -- so-called \textit{overparametrisation} -- does come at the cost of increased risk of overfitting\footnote{The loss-minimisation-driven adaptation of the model to the training dataset at the point of losing generalisation ability -- \textit{i.e.} the inability to learn the abstract task beyond the specific exemplifying data.} and unmanageable complexity. To counteract such downsides -- as in \textit{traditional} statistical practice -- \textit{regularisation strategies} have been developed, some of them specific to deep learning, which will be discussed next.
 
 \paragraphnl{Weight decay}
-First of all, one could apply -- to the optimisation problem of finding $\vec{\theta^*}$ -- the same \textit{penalisation} regularisation techniques typical of \textit{traditional} statistics; in particular, $L_2$-penalised fitting (\textit{à la} ridge regression). Such approach is called -- within the deep learning community -- \textit{weight decay}\footnote{See \cite{KroghPalmer1991WeightDecay}.}; it is indeed possible, for iterations of the type described in (\ref{eq:1}) to express the $\mathcal{L}_{\text{ridge}} \leftarrow \mathcal{L} + \frac{\gamma}{2}||\vec{\theta}||_2$ regularisation as a modified iteration, \textit{i.e.}
+First of all, one could apply -- to the optimisation problem of finding $\vec{\theta^*}$ -- the same \textit{penalisation} regularisation techniques typical of \textit{traditional} statistics; in particular, $L_2$-penalised fitting (\textit{à la} ridge regression). Such approach is called -- within the deep learning community -- \textit{weight decay}\footnote{See \cite{KroghPalmer1991WeightDecay}.}; it is indeed possible, for iterations of the type described in (\ref{eq:1}) to express the $\mathcal{L}_{\text{ridge}} \leftarrow \mathcal{L} + \frac{\gamma}{2}\normof{\vec{\theta}}_2$ regularisation as a modified iteration, \textit{i.e.}
 
 $$\vec{\theta_{i+1}} \leftarrow  \vec{\theta_{i}} - \lambda\vec{g_i} - \lambda\gamma\vec{\theta_i}\fullstop$$
 
@@ -172,11 +172,26 @@ This description, together with the realisation that, indeed, such \textit{learn
 
 Additionally, such viewpoint leads remarkably close to \textit{neural computation} in biological systems, where a similar framing of the field is offered in terms of (biological) neurons capable of plastic analogue processing of frequency-coded electrical stimuli (with the astounding and tangible result that cognition, indeed, is!) -- further strengthening the connections\footnote{Pun involuntarily intended.} of deep learning with its original motives.
 
-\paragraphnl{\textit{Auto-encoders}: compressing via reconstruction}
+\paragraphnl{\textit{Auto-encoders}: compressing by learning to reconstruct}
+Back to a more specific description, the first of such aforementioned \textit{patterns} we will describe is that of the \textit{auto-encoder}\footnote{A nowadays well-established architecture in the field, for which it is difficult to backtrace to a clear \textit{first} in literature. See, \textit{e.g.}, \cite{Kramer1991Autoencoders}}: a peculiar deep learning architecture used to first learn, and then apply, a \textit{compression} of the input data. In this case -- and almost always, unless explicitly specified -- such input is to be considered part of a somehow structured collection: being it that of the samples of a specific -- but potentially unknown -- probability distribution of interest (or a mixture of them), or more broadly that of inputs generically satisfying a property (\textit{e.g.} being natural images -- \textit{i.e.} not being purposefully generated in a corner-case manner, for whatever reason! --, being recordings of a human voice or animal call, being time \textit{ticks} of stock title evaluations, \textit{etc...}), often enough to specify the context dictating their use.
 
+And indeed, the goal of finding any \textit{compressed representation} for the data of interest directly translates in exploiting the properties of the overall collection -- or the collection of properties of individual datapoints -- to reduce their dimensionality in the most information-preserving\footnote{Here intended both in the \textit{information-theoretical} sense, more formally -- but also in the less \textit{well posed} meaning of \textit{"being able to preserve all features of interest, while potentially discarding the less relevant ones"}} fashion.
 
+The practical approach required to accomplish such (potentially very hard!) goal is on the other hand particularly simple.
+
+The neural architecture will be composed of two subnetworks $\netw{E}$ and $\netw{D}$ -- respectively the \textit{encoder} and the \textit{decoder} -- linked by the following conventional relations:
+$$\vec{c} = \netw{E}(\vec{x})$$
+$$\vec{\tilde{x}} = \netw{D}(\vec{c})$$
+with, usually, $\dimof{\vec{c}} \ll \dimof{\vec{x}}$ ad a loss encoding the similarity between the original input $\vec{x}$ and $\vec{\tilde{x}}$, that constitutes in this case its tentative reconstruction -- \textit{e.g.} an $L_2$ similarity metric \suchthat $\mathcal{L}_{\text{AE}}(\vec{x}) = \normof{\vec{x} - \netw{D}(\netw{E}(\vec{x}))}_2$.
+
+The \textit{dimensionality bottleneck} -- also called indeed an \textit{information bottleneck} -- induced by the property $\dimof{\vec{c}} \ll \dimof{\vec{x}}$ forces the network, trained under the loss-driven optimisation, to reconstruct the original input from a much smaller-dimensional representation of it; and as a consequence, forces the \textit{encoder} to convey as much information as possibly learnable in the $\vec{c} = \netw{E}(\vec{x})$ step -- with the \textit{code} $\vec{c}$ being the compressed result sought after.
+
+At this point -- with $\netw{D}$ usually discarded except in very particular scenarios -- the learnt \textit{compressor} $\netw{E}$ may be used on any potential input, in order to obtain a \textit{compressed representation} of it -- which is then treated as its characteristic, lower-dimensional, set of \textit{features} for further processing.
+
+One potential downside of such architecture -- beyond the specific task of learning a \textit{compression} of the data -- is the fundamental lack of use for the corresponding \textit{generator}, which is nonetheless functional for the whole, but not on its own.
 
 \paragraphnl{Learning distributions by \textit{auto-encoding} sampled data}
+Right from such latter observation, one can consider the thought process leading to the development of the \textit{variational}\footnote{See \cite{KingmaWelling2014AutoEncoding} for the paper in which it was introduced.} and \textit{variational conditional}\footnote{See \cite{SohnEtAl2015CVAE} for the paper in which it was introduced.} autoencoders: probabilistic counterparts of the \textit{simple autoencoder} which allow generative modelling (and indeed whose \textit{encoder} alone is almost never used on its own).
 
 
 \subsection{\textit{Adversarial Robustness} (and lack thereof)}
