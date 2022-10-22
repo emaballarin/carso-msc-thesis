@@ -2,21 +2,160 @@
 
 \npsection{Aiming at robustness, guided by neuropsychology}
 
-\subsection{Problem statement}
+The following section -- definitely shorter than the previous in spite of a reverse allocation of efforts necessary for it to be ultimately realised -- will be dedicated to the description of \texttt{CARSO}\footnote{The subtext originates from the Italian name of the \textit{Karst Plateau} region stretching across the Italian-Slovenian border, and whose colours, lovely hikes, and sober austerity is loved by all those who have visited -- let alone lived, or still living within! --  the Trieste area.} (\textit{i.e.} \textit{CounterAdversarial Recall of Synthetic Observations}) -- a novel technique of \textit{defence to adversarial attacks}, synergistically spanning the \textit{adversarial training}, \textit{purification}, and \textit{inference-time} subclasses. Additionally, the technique allows for fully-unsupervised training (\textit{i.e.} \textit{class-label}-less), but provided a dataset of known (unlabelled) perturbations or an \textit{attack generator} is available when starting from a pretrained adversarially-trained model -- achieving even greater robustness against \textit{foreseen} attacks, and strong robustness against \textit{unforeseen} attacks the sole pretrained model is completely unable to foil.
 
-\subsection{Related work and \textit{prior art}}
+The method has been developed as a defence against \textit{white-box}, \textit{untargeted} attacks towards image classifiers; the applicability to other settings within image classification is reasonably assumed, but still pending, planned verification -- along that within other fields of application.
 
 \subsection{Neuroscience as a guiding inspiration}
-\subsubsection{An epistemological \textit{intermezzo}}
+
+It is safe to say that the core ideas behind this work -- and even its goal and field of application -- definitely did not came about as such, but were gradually \textit{discovered} along the way\footnote{In an unplanned corroboration of Kenneth Stanley's core tenet; see \cite{StanleyLehman2015WhyGreatness}.}.\\
+The starting point was a loosely defined intention to exploratorily investigate the liminal space across \textit{artificial intelligence} -- and specifically \textit{machine learning} with \textit{artificial neural architectures} -- and \textit{cognitive-to-computational neuroscience}.
+
+Indeed, the origins of the field of \textit{deep learning} -- then represented by the study of \textit{local} and \textit{emergent} properties of essentialised mathematical models of interacting neurons, their interrelation and capabilities \wrt \textit{learning} -- shared with neuroscience the deep and ambitious goal of modelling in some way activities pertaining to \textit{brains}, no matter how complex or \textit{intelligent}, with the aim of \textit{doing} the former, and of \textit{understanding} the latter.
+
+Decades later, the gap has widened -- with clear (and often healthy, if within limits) differences in methods and mission -- not rarely still spurring the debate about which degree of interconnection is the one to be wished for. And in the light of the extraordinary successes in \textit{deep learning} --, even the most advanced of its systems is still unable to even remotely approach some peculiar cognitive features of animals or humans, let alone with the ease of those living organisms. And still, they may be the only practical realisation of the systemic behaviour some within the deep learning community are trying to replicate \textit{in silico} from a different viewpoint.
+
+Among the wide array of cognitive phenomena qualifying for the properties just outlined, that of \textit{higher intelligence} in humans or primates, up to \textit{cognition} and \textit{consciousness}, is definitely the most striking and -- not surprisingly -- out-of-reach. No settled, \textit{experimentable}, definition of it has been even produced! Regardless, armed with just a tentative, blurry, definition of \textit{consciousness as "thought about thought"} we fast approached a \textit{sanity check}: is this even expressible in terms of the current \textit{deep learning} framework?
+
+\subsubsection{Learning by \textit{recall} and \textit{self-introspection}}
+Losing much of the \textit{deepness} in our thoughts, we finally focused on a very specific \textit{flavour} of the definition we had in mind earlier: the \textit{recall} of acquired memories -- specifically, during the process of learning, so to slightly close the already very large gap with deep learning practice.
+
+Even simply by \textit{self-introspection} -- but definitely also within published psychological and neuropsychological literature -- it appears clear that \textit{recall} of previously memorised information is crucial in (not only) learning processes across a wide variety of animal models, and in humans. In such regard, and with not even the slightest intention of completeness, see \textit{e.g.} \cite{McDermott2006ParadoxicalEO} and \cite{YangEtAl2018EnhancingLA}, about the peculiar phenomena of \textit{forward testing} and \textit{repeated testing}, potentially rooted in the explicit awareness that currently acquired, new, information may be necessary for future recall. Or, more generally, about the role of hippocampal dynamics in learning and memorisation of spatial information, in \cite{BirdBurgess2008Hippocampus}. Finally, for much broader-encompassing treatise on \textit{learning}, see published book \cite{Dehaene2018HowWeLearn}.
+
+From which, the idea to directly utilise the representation of (part of) an artificial neural network -- as a rough approximation of \textit{liminal} memory within a deep learning model -- to inform the training of itself (or another portion of it) -- with focus on using it as an \textit{adversarial defence}.
+
+The final result of the perambulation that ensued is reported in the following.
 
 \subsection{\texttt{CARSO}}
+\subsubsection{Problem \& solution statement}
+\texttt{CARSO} is a novel deep learning \textit{model architecture} and associated \textit{training} and \textit{inference} methodology -- designed to increase the robustness of image classifiers against \textit{gradient-based} \textit{perturbative} \textit{adversarial attacks}: both \textit{foreseen} and \textit{unforeseen}, and to do so better than \textit{iterative adversarial training}\footnote{\textit{I.e.} where each batch of the training set in enriched with adversarial attacks against the current parameters of the model, after which such parameters are updated as usual, and previous attacks discarded to be re-generated right afterwards.} according to \textit{top-1 accuracy under attack}\footnote{The ratio of correctly classified adversarial attacks targetting the model itself, labelling its input with the predicted most probable class.} evaluation, in both scenarios. The model architecture has been designed as generally independent from specific hyperparameter choice\footnote{To the optimisation of which as been -- indeed -- dedicated little time and effort.}, which can be freely optimised according to the specific problem of interest.
+
+Finally, since relying on the adversarial training of the classifier of interest, against \textit{foreseen} attacks, such classifier can be directly provided as an \textit{adversarially-trained}, \textit{pre-trained} model -- without preventing the training of further parts of \texttt{CARSO} or full applicability of the training/inference protocols. In such occurrence, no labelling efforts whatsoever are required to the \textit{trainer} of \texttt{CARSO}.
+
+\subsubsection{General intuitions}
+The main intuitive considerations guiding the development of \texttt{CARSO} are synthesised along the following \textit{thought flow}:
+\begin{itemize}
+    \item At inference time, being all neurons governed by deterministic operations, the representation formed within each of them in a \textit{feedforward} model must deterministically depend from those of the neurons in the previous layer, and the weights associated with the connections within the two layers. Such reasoning may be iterated straight from the scalar values part of the input (hypothetically part of an \textit{input layer}) up to the final layer of the network (whose neuron with the largest representation determines the output class).
+    \item Weights are fixed at inference time.
+    \item If a given input is correctly classified by a \textit{feedforward} classifier, but a perturbative adversarial attack starting from such input is performed and succeeds, then a \textit{small} perturbation in the \textit{input layer} must have been somehow preserved along the network until the \textit{output layer}. In this respect, \cite{DoimoEtAl2020Hierarchical} has provided key insights.
+    \item As a consequence, the ordered representation of all (potentially; less may be sufficient) neurons in the network must carry sufficient information to identify signature \textit{pathways} activated by any \textit{clean} or \textit{perturbed} input datapoints.
+    \item Such ordered representation can be used as input to a further model, with \textit{e.g.} the goal of providing \textit{adversarial detection}.
+    \item Any \textit{gradient-based} attack targetting such further \textit{detector} must be able to produce a perturbation in the classifier input that -- within the strength constrains of such input -- jointly not only produces a \textit{misclassification}, but also a (potentially unbound in strength) perturbation of the representation (considered as input to the \textit{adversarial detector}) fooling the latter.
+    \item The gradients computed along the computational graph associated with the original classifier up to its output \wrt the chosen \textit{classification loss} and those tracked along the \textit{detector} through the classifier representation are fundamentally different at the neurons of the classifier. Thus, any attacker attempting to do so, must at least optimise for two competing objectives -- with no guarantee of success in both simultaneously. Published literature is completely lacking results pertaining the existence (or not) of such solutions.
+    \item A similar result would be even more favourable in the case of \textit{adversarial purification}. This can be obtained if the ordered representation of the classifier, produced by the (potentially perturbed) input, is used to \textit{condition} the purification process without interest in the actual output class. Then, the purified input is classified by the same classifier having produced the representation -- in order to ensure \textit{competing gradients} in the classifier.
+    \item If the information contained in the representation of the classifier is sufficient to even recover the input having produced it (and indeed it is possible, by \textit{just} approximately inverting the function described by the first layer of the network, from its representation!), the same device can be used to generate an entire distribution of candidate \textit{purified} inputs -- by replacing the code associated with the input with a structured random sample at inference time. This is exactly what a \textit{conditional variational autoencoder} does.
+    \item Such latter sampling is also beneficial to the overall robustness of the system -- in case of specially-crafted attacks against it. By classifying a randomly sampled set of \textit{purified} inputs (instead of only one) and aggregating the resulting classes, (non-adversarial) robustness to reconstruction noise or blur\footnote{Which is a typical phenomenon in such architectures.} is increased dramatically. A hypothetical attacker should not only be able to solve the multi-objective optimisation problem described above: it should do so robustly \wrt generative sampling.
+    \item Adversarial training of the original classifier does not interfere with the procedure just outlined, but it even strengthens it. Not only the number of successful adversarial attacks decreases for the classifier (thus resulting in an easier learning of the denoising process), but it also provides a further safeguard should the \textit{purification} be \textit{leaky}.
+\end{itemize}
+
+Such ideas -- with additional minor \textit{tricks} required to work around some training difficulties or \textit{corner cases} are directly translated into the description of the methodology that follows.
+
+\subsubsection{Training protocol and architecture}
+The training protocol of \carso is described schematically below, together with architectural elements required at each step. Illustrative diagrams are provided in the \hyperref[sec:appendix]{appendix}.
+
+The classifier of interest $\mathcal{N}$ -- whose robustness has to be increased -- is \textit{adversarially trained} according to a pre-specified threat model (resulting in \textit{foreseen attacks against the classifier}), until full convergence. This phase requires both an (or more) \textit{attack generation mechanism} of choice and a labelled \textit{clean} dataset. Alternatively, an \textit{adversarially trained}, \textit{pre-trained} classifier can be used: in such case, however, the threat model is not fully controllable.
+
+Inputs (to $\mathcal{N}$) from a \textit{clean} dataset are then perturbed according to a pre-specified threat model against the adversarially trained $\mathcal{N}$ from previous step (resulting in \textit{foreseen attacks for purification}). Differently from previous step -- though a \textit{clean} dataset is still required -- no labelling is necessary, nor it is the actual success of the attacks. In case a \textit{pre-trained} $\mathcal{N}$ has been used, adversarial attacks directed at it may also be readily available: in such case not even an \textit{attack generator} is necessary, at the further cost of fully losing control over the threat model; the corresponding \textit{clean} datapoints of each attacked input must be available, though.
+
+The ordered\footnote{The actual order is not relevant, provided it is persistent \wrt the locations of the same neurons within the network.} representation of the classifier is extracted and used as conditioning set of a \textit{conditional variational autoencoder} (of encoder $\mathcal{E}$ and decoder $\mathcal{D}$) acting as a \textit{purifier}. By encoding inputs picked from the \textit{clean} dataset, augmented with the \textit{foreseen attacks for purification} -- and conditioning on the ordered representation -- a map to the corresponding \textit{clean}\footnote{The \textit{clean} input corresponding to a non-perturbed one is... itself!} input is learned. The model could be specifically trained as any other \texttt{cVAE}.\\
+In case the dimensionality of the input needs to be rebalanced against that of the classifier representation (or viceversa; a procedure usually done to improve the convergence properties of the \texttt{cVAE} and speed up its training), an \textit{end-to-end} approach has to be preferred. Dimensionality-reducing \textit{pre-encoders} $\mathcal{E}_{\text{DRI}}$ for the input and $\mathcal{E}_{\text{DRR}}$ for the representation can be directly placed on top of the \texttt{cVAE} and their training jointly performed.
+
+At the end of such training, only trained $\mathcal{E}_{\text{DRR}}$ (if any) and $\mathcal{D}$, and the adversarially trained $\mathcal{N}$ are required for inference.
+
+\subsubsection{Inference protocol}
+The inference protocol of \carso is now described schematically below. Illustrative diagrams are provided in the \hyperref[sec:appendix]{appendix}.
+
+On arrival of a new input, this is evaluated by the \textit{adversarially-trained} $\mathcal{N}$ with the aim of obtaining only its ordered representation (\textit{i.e.} there is no interest in the actual prediction, which can be safely discarded).
+
+The representation just extracted is concatenated with a random sample extracted from the latent distribution implied during the training of the \texttt{cVAE}, and passed through $\mathcal{D}$ producing as output a candidate purification of the input. Such process can be repeated an arbitrary number of times, thus generatively sampling from the posterior distribution of purified inputs associated with the original one.
+
+The resulting collection of purified inputs is -- each separately -- classified by the same \textit{adversarially-trained} classifier $\mathcal{N}$, thus resulting in a distribution of classes.
+
+The resulting \textit{mode class} may be used as the actual output of the system.
 
 \subsection{Experimental evaluation}
-\subsubsection{The dataset}
-\subsubsection{The classifier architecture}
-\subsubsection{Adversarial attacks: \textit{foreseen}}
-\subsubsection{Adversarial attacks: \textit{unforeseen}}
-\subsubsection{The purifier architecture}
-\subsubsection{Training dynamics}
+
+The architecture and protocols proposed have been assessed on a prototypical, self-developed benchmark test aiming at the evaluation of \textit{top-1 accuracy under attack} in a simulated scenario with both \textit{foreseen} and \textit{unforeseen} perturbations.
+
+Tests have been performed on the \texttt{MNIST} dataset\footnote{A dataset of small, square, greyscale digitisations of handwritten digits; see \cite{LeCunCortes2005MNIST}}, normalised to the $[0,1]$ range and further standardised. The \texttt{FGSM} (constrained at $\epsilon=0.15$ and $\epsilon=0.3$ \wrt the $\normof{\cdot}_2$ norm) and \texttt{PGD} (constrained at $\epsilon=0.15$ and $\epsilon=0.3$ \wrt the $\normof{\cdot}_{\infty}$ norm) attacks have been considered as representatives of \textit{foreseen} attacks -- whereas \texttt{DeepFool} (constrained at $\epsilon=0.15$, $\epsilon=0.3$ and $\epsilon=0.5$ \wrt the $\normof{\cdot}_{\infty}$ norm) and the stronger \texttt{FGSM} (constrained at $\epsilon=0.5$ \wrt the $\normof{\cdot}_2$ norm) and \texttt{PGD} (constrained at $\epsilon=0.5$ \wrt the $\normof{\cdot}_{\infty}$ norm) as those of \textit{unforeseen} attacks.\footnote{As a comparative note related to the strength of the perturbations, strengths above $\epsilon=0.3$ are usually considered unrealistic, in the context of the \texttt{MNIST} dataset, due to easy detectability by the naked human eye. Bearing that in mind, the peculiar \texttt{DeepFool} has been selected as \textit{unforeseen} due to the unique approach at eliciting vulnerabilities in the attacked model; $\epsilon=0.5$-bound perturbations as deliberately \textit{extreme} attacks to test the upper limits of the defence.}
+
+All iterative attacks (\textit{i.e.} \texttt{PGD} and \texttt{DeepFool}) additionally bore constraints on the maximum number of iterations to be performed (fixed at $40$ and $50$ respectively) and on the size of per-iteration perturbation ($0.01$ and $0.02$ respectively).
+
+As far as any of the \textit{deep learning} models are concerned, only \textit{fully-connected feedforward} architectures have been considered due to their simplicity and the still underdeveloped study of the proposed technique. In order to reduce the dependency from hyperparameters, the number of neurons in \textit{hidden} layers have been fixed at that interpolating the two adjacent -- with the only exception being the classifier. This reduces the description of layer sizes along networks to that of the input, output, and the overall number of \textit{hidden layers}.
+
+The classifier was built as a \textit{FCN} variation upon \textit{convolutional} neural network \texttt{LeNet5}\footnote{See \cite{LeCunEtAl1998LeNet5}.}, with an input size of $28 \times 28$ (the size in \textit{greyscale} pixels of the image), an output of $10$ (corresponding the ten digit classes) and hidden layers of sizes $200$ and $80$. Each layer, with the exception of the last one, is preceded by $0.15$ probability \textit{dropout} and \textit{batch normalisation}. The innovative \texttt{Mish}\footnote{A recently-proposed \textit{smooth}, non-monotonic \textit{non-linearity}, expressible as $x\ \text{tanh}(\text{softplus}(x))$, whose popularity has steadily increase especially within the \textit{computer vision} community. See \cite{Misra2019Mish} for a much more extensive analysis and experimental evaluation.} activation function has been the \textit{non-linearity} of choice -- due to its effectiveness in expressing flexible mappings within even smaller models; the model has been trained via output-\textit{softmax}ed \textit{categorical cross-entropy} minimisation.
+
+The resulting representation consisted of $290$ scalars. The latter, and original input, have been pre-compressed by \textit{2-hidden-layer} networks with \textit{batch normalisation} and no \textit{dropout} before hidden layers, with those using \textit{$0.1$-steep} \texttt{Leaky ReLU}s\footnote{See \cite{Xu2015EmpiricalEO}.} as \textit{non-linearities} -- to respectively ${1/5}^{th}$ and ${1/4}^{th}$ their original size, before being finally being shrunk through a sigmoid.
+
+The encoder of the \texttt{cVAE} consisted in a further \textit{1-hidden-layer} network of the same kind -- with hyperbolic tangent shrinking, followed by two independent linear layers sharing the same input to finally produce $36$ means and standard deviations of independent Gaussian distributions.
+
+The decoder mapping the conditioning set and the sample back to input space is a \textit{2-hidden-layer} network -- of the same kind as the \textit{pre-compressor}, without \textit{Batch Normalisation} before the last layer. A further sigmoid at the end ensures a correct \textit{input coding} in the pixelwise $[0,1]$ domain. The reconstruction loss for the \texttt{cVAE} has been \textit{binary cross entropy}, as a more amenable alternative to $\normof{\cdot}_2$ for inputs bound within $[0,1]$.
+
+The \textit{unperturbed} classifier as a baseline, and both the adversarially trained and the \texttt{cVAE}, have been trained by the \texttt{RAdam} optimiser (with fixed $\beta_1=0.9$, $\beta_2=0.999$ and numerical stability constant $\varepsilon=10^{-8}$), a starting learning rate of $0.05$, $0.05$ and $0.001$ respectively -- with further scaling by a factor $0.6$, $0.6$, and $0.7$ upon first after $10$-epochs window, since previous \textit{learning rate} reduction, resulting in no overall loss decrease. A hard limit was liberally put at $300$ epochs in total to ensure full convergence.
+
+The number of purified samples at inference time was fixed at $1500$, and aggregation performed by \textit{mode}.
+
 \subsubsection{Results}
-\subsubsection{Limits}
+
+Following the protocol described, and the specific \texttt{CARSO} architecture detailed by the \textit{hyperparameters} just reported, our proposal has been compared with \texttt{IAT} resulting in the following table ~\ref{table:results}.
+
+\begin{table}[hbt]
+    \centering
+    \begin{tabular}{@{}lllll@{}}
+    \toprule
+    Attack (\textit{type}) / Defence (\textit{adv. acc.\%})      & None & \texttt{IAT} & \texttt{CARSO} &  \\
+    \midrule
+    None                   & \textbf{98.40}                & 97.17              & 96.72                &  \\
+    \midrule
+    FGSM $\normof{\cdot}_2$, $\epsilon=0.15$         & 12.09                & 91.89              & \textbf{93.62}                &  \\
+    FGSM $\normof{\cdot}_2$, $\epsilon=0.30$         & 01.21                & 76.94              & \textbf{86.43}                &  \\
+    \midrule
+    (U) FGSM $\normof{\cdot}_2$, $\epsilon=0.50$     & 01.00                & 12.29              & \textbf{13.59}                &  \\
+    \midrule
+    PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.15$     & 01.60                & 90.54              & \textbf{93.44}                &  \\
+    PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.30$     & 06.85                & 71.26              & \textbf{86.27}                &  \\
+    \midrule
+    (U) PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.50$ & \textit{20.66}                & \textit{11.67}              & \textbf{38.38}                &  \\
+    \midrule
+    (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.15$  & 00.66                & 90.25              & \textbf{95.06}               &  \\
+    (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.30$  & 00.00                & 60.54              & \textbf{93.31}                &  \\
+    (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.50$  & 00.00                & 00.78              & \textbf{71.34}                &  \\ \bottomrule
+\end{tabular}
+    \caption{
+        \textit{Top-1 accuracy under attack} against different types of \textit{adversarial attack} (rows) directed at the \textit{FCN} classifier, defended by two techniques (columns): \textit{Iterative Adversarial Training} and \texttt{CARSO}. \textit{Unforeseen} attacks -- against both the classifier and the purifier -- are marked by "(U)"; the best performing \textit{defence} per given \textit{attack} is emboldened.
+    }
+\label{table:results}
+\end{table}
+
+\subsubsection{Ablation studies}
+Ablation studies were performed in order to assess whether the most relevant modelling choices resulting in the final architecture and protocols of \carso were justified \wrt a simpler, more \textit{traditional} alternative.
+
+Results are summarised in the following.
+
+\begin{itemize}
+    \item \underline{On the necessity of \textit{adversarial training} altogether.} Tests were performed with the same architecture as that described, training all models on \textit{clean} inputs only. The results -- in the same setting investigated right above -- showed a significant increase in adversarial robustness compared to the \textit{clean} model, with accuracies under attack in the range of $0.15\%\sim0.25\%$ for the classifier and $15\%\sim25\%$ for \texttt{CARSO}. Despite indicative of some degree of success, such approach was discarded as markedly unsatisfactory \wrt other simpler and more popular adversarial defences. Noteworthy the fact that -- in some rare cases -- such approach still managed to obtain a robustness comparable to or greater than \textit{iterative adversarial training}. Similar attempts \wrt \textit{partial} adversarial training (\textit{i.e.} of the classifier or the \texttt{cVAE} alone) were performed, resulting in a slight increase in \textit{accuracy under attack} in comparison to the entirely non-adversarial training; still, similar considerations applied, due to the lack of competitiveness with simpler alternative defences.
+    \item \underline{On the number of purified samples.} Sweeps across three orders of magnitude have been performed, with a sample size under $700$ showing unsatisfactory results due to intolerable reconstruction noise. Detectable increases were present until $\sim2000$, becoming less significant after $1500$.
+    \item \underline{On the number of layers in the \texttt{cVAE} networks.} Avoiding by design networks with no \textit{hidden layers}, the number of them in those carrying $>1$ have been -- indeed -- increased starting from $1$ and with $1$-increments as part of the development process, until the shallowest satisfactory network was reached.
+\end{itemize}
+
+Structured attempts at further \textit{hyperparameter} optimisation, different kinds of adversarial attack for the \textit{foreseen} and/or \textit{unforeseen} cases, different image datasets (including changes in subject and/or colour space), or different types of data have not been performed -- but are planned within the ongoing exploration of such defence technique.
+
+\subsubsection{Discussion}
+
+From the comparison of the accuracies reported above, it is possible to firstly see that -- further along the lines of what occurs in the case of \textit{iterative adversarial training}, and \textit{adversarial training} in general -- the newly proposed defence technique imposes an \textit{accuracy toll} in the case of \textit{clean} inputs. Being exactly the same \textit{iteratively adversarially trained} classifier shared among \texttt{CARSO} and \texttt{IAT} approaches -- and even considering the effects of purification noise/blur alone, it is expected that such \textit{accuracy toll} is in the case of \texttt{CARSO}, even if marginally, greater \wrt \texttt{IAT}.
+
+On the other hand, if we consider even just the results on against \textit{foreseen} attacks, it is evident a pervasive and much more remarkable \textit{accuracy under attack} gain by \texttt{CARSO}, which increases with the strength of the attack. Such peculiar phenomenon will be further discussed, in the light of what follows. In the case of strong \textit{universal attacks}, \texttt{CARSO} attains more than an $1/5^{\text{th}}$ incremental  accuracy gain. In no case among those tested, \texttt{IAT} fared better than \carso against \textit{foreseen} attacks. At this point -- and further clearing the floor form the considerations about the the high resilience of \texttt{CARSO} against directed attacks -- whether the additional time required for the training of the \texttt{cVAE} machinery, and the latency penalisations at inference determined by the repeated sampling process and classification, are justified by the more robust results is still up to debate.
+
+The area in which \texttt{CARSO} shines the most is yet to be analysed: robustness towards \textit{unforeseen} attacks. Though very marginal in the case of strong, \textit{unforeseen} \texttt{FGSM} attacks (still producing an increase of around $1/12^{\text{th}}$), performance against strong \texttt{PGD} attacks and any \texttt{DeepFool} perturbation is very solid. While in the case of the weakest \texttt{DeepFool} attack the \textit{accuracy under attack} gain is significant but ultimately modest \wrt \texttt{IAT}, the remaining strengths show its highest.
+
+While the overall increased robustness shown by \texttt{CARSO} is definitely the effect of a synergistic interaction among the two proper \textit{models} involved (\textit{i.e.} the adversarially-trained classifier and the \texttt{cVAE}, which are -- indeed -- self-standing \textit{adversarial defences} on their own) -- in retrospect it is further possible to hypothesise a deeper insight into the \textit{credit assignment} between the two cooperating strategies, and across the cases considered.
+
+By noticing how -- by construction -- the \texttt{DeepFool} attack favours perturbations resulting \textit{off-data-manifold}, and by correlating the much increased success in defending against such attack to the addition of the \texttt{cVAE} to an already \textit{adversarially-defended} classifier, one may suggest that:
+\begin{itemize}
+    \item The adversarial training of the classifier -- with the highest density of perturbations close to the \textit{data manifold}, due to both accidental choice of \textit{foreseen} attacks and peculiar training dynamics -- mostly helped in reducing the \textit{local intrinsic dimension}\footnote{See \cite{BortolussiSanguinetti2018IntrinsicGV} for a much more in-depth analysis of the phenomenon -- and definitely more!} of decision boundaries between \textit{on-manifold} classes.
+    \item On the other hand, the addition of an encoder/decoder model tasked with the purification of adversarial inputs directed towards the same \textit{adversarially-trained} classifier, may have mostly compensated the expansion along the \textit{co-dimensional} submanifold, within input space. The increase in \textit{accuracy under attack} offered by the addition of the \texttt{cVAE} with laxer strength constraints  may indeed corroborate this hypothesis: within a smaller allowed displacement radius in input space, the \textit{data manifold} may contain a close-enough moderately effective result of adversarial perturbation. However, it is \textit{out-of-manifold} that the training set (of purely adversarial examples, used during training) is more disperse -- and the effect of untargeted, competing perturbations lying on the surface on the \textit{clean}-input-centred cone may easily cancel out in the long run. If allowed, a stronger attacker will probably find there a much more optimal attack.
+\end{itemize}
+
+The potential development along such final consideration is definitely interesting both from the viewpoint of pure \textit{comprehension} of the phenomenon of adversarial attacks and robustness -- but also for the practical development of actionable defences able to respond differently in case of different threats.
+
+With respect to the last point, the results of the strongest (and unforeseen) \texttt{PGD} attack my be a motivating example: the robustness of the \texttt{IAT}-trained model is decreased \wrt the \textit{clean} classifier. An explanation may depend on the learning capacity of the model being undersized for a the learning of all given examples within arbitrary tolerances: this induces competition among different examples within the model. And while the optimisation problem tackled by a gradient-based \textit{attacker} is -- as in the training process of a neural model was -- poisoned by the same susceptibility to local convergence, such competition may have \textit{involuntarily} smoothed the loss landscape for the \textit{enemy}.

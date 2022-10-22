@@ -2,8 +2,25 @@
 
 \npsection{Conclusions}
 
+In the work which is now concluding, we moved from the genuine curiosity about how the study of elusive cognitive phenomena may inform the development of ever more capable \textit{deep artificial neural networks}. Along the way -- we described the development of \texttt{CARSO}, a potentially promising, still \textit{embryonic}, novel technique to provide reliable \textit{adversarial defence} against \textit{gradient-based} \textit{foreseen} and \textit{unforeseen} attacks targeting a \textit{fully-connected feedforward image classifier} -- and we positively assessed its effectiveness against a most relied-upon, alternative methodology.
+
+Though coming at an increased cost in terms of \textit{clean input} accuracy and training time (making it probably not the first choice for realtime, continuous-acquisition applications), \texttt{CARSO} is additionally able provide -- as an \textit{add on} to previously \textit{adversarially-trained} classifiers, and without relying on additional labelling -- \textit{innate}, close to \textit{clean} accuracy to perturbed inputs with a strong \textit{off-data-manifold} component, and so self-defend against \textit{gradient-based} attacks directed specifically at it.
+
+Most importantly, it was able to provide further -- deeper and enthralling -- questions waiting to be played with, both down along the way towards the development of safer, less exploitable \textit{deep learning} and within the \textit{fertile crescent} at the confluence of the \textit{biological} and the \textit{mathematical} approach to the study of intelligence, in all its possible \textit{hues}.
+
+
 \subsection{Future work}
+
+The contribution provided by this thesis is indeed minimal with such an ambitious destination in mind; yet it could be the starting point down potentially many avenues just discovered.
+
+\subsubsection{Incremental experimentation}
+
+Surely, the experimental evaluation of \texttt{CARSO} -- across a wider variety of threat models, datasets and tasks, \textit{adversarial attacks} and variations of the same protocol, is the most needed and immediate pursuit required to further understand and eventually \textit{productionise} the technique.
 
 \subsubsection[\texttt{FiWAGR}: \textit{Filtering via Weight Agnostic Gradient Randomisation}]{\texttt{FiWAGR}\protect\footnote{To be pronounced as \textit{"figure"} -- in a stretch, will it ever be possible: both to be carried out as a work, and/or to be pronounced as such.}: \textit{Filtering via Weight Agnostic Gradient Randomisation}}
 
-\subsubsection{\textit{Moonshot} goals}
+Furthermore, the leverage of \textit{competing gradients} within model representation -- at the basis on an increased defensibility against \textit{directly-targeted} attacks -- could inspire additional, independent evolutions towards \textit{theoretically-guaranteed full gradient-based defences}. Of this kind, a for now only hypothetical, still unexplored, neural architecture containing \textit{gradient-stopping} \textit{weight-agnostic} layers\footnote{First theorised and experimented with in \cite{GaierHa2019WANNs}, but whose perceived interest waned over time within the \textit{deep learning community}.} able in theory to provide a randomised gradient independent of model functionality -- and converging to zero in expectation without resulting in \textit{gradient masking} for individual samples.
+
+\subsubsection{\textit{Moonshot} goal(s)}
+
+Finally, still with the \textit{original} goal in mind and potentially deviating from the riverbed of the work until now illustrated, more \textit{direct} approaches towards \textit{biological/artificial intelligence convergence} may be taken. \textit{E.g.} by analysing the actual structure on representations along \textit{neural models} and \textit{neurobiological pathways} (\textit{e.g.} the \textit{ventral stream}) of live animals during the actual process of learning\footnote{Such fascinating direction of research has been suggested by Fabio Anselmi during the last \textit{Neuroscience \& Statistical Physics Workshop}, held at SISSA in late Spring 2022.}. At this stage, we still do not know if such path will be walkable, or where it would eventually lead: maybe to nowhere, maybe to ever new questions, whose growing abundance may incidentally substantiate the same act of \textit{thinking} we started interrogating about.

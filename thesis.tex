@@ -52,6 +52,8 @@
 \usepackage{graphicx}
 \babelinit   % Repeated, but necessary!
 
+\usepackage{colorprofiles}
+
 \input{insbox.tex}
 
 \usepackage[font=small,font=it]{caption}
@@ -86,10 +88,14 @@
 \usepackage{parskip}
 \usepackage{xcolor}
 
+\usepackage{booktabs}
+
 \usepackage{microtype}
 
 \usepackage[hang]{footmisc}
 \setlength\footnotemargin{8pt}
+
+\usepackage[a-3b,mathxmp]{pdfx}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -123,10 +129,22 @@
 \newcommand{\wlogg}{\textit{w.l.o.g.\ }}
 \newcommand{\wrt}{\textit{w.r.t.\ }}
 \renewcommand{\vec}[1]{\bm{#1}}
+\newcommand{\carso}{\texttt{CARSO}\ }
+
+\newlength\longest
+
+\begin{filecontents*}[overwrite]{\jobname.xmpdata}
+    \Title{CounterAdversarial Recall of Synthetic Observations (CARSO): A novel deep learning architecture and methodology for the improvement of adversarial robustness in image classification tasks, inspired by image recollection during visual learning}
+    \Author{Emanuele Ballarin <emanuele@ballarin.cc>}
+    \Language{en-GB}
+    \Subject{CounterAdversarial Recall of Synthetic Observations (CARSO): A novel deep learning architecture and methodology for the improvement of adversarial robustness in image classification tasks, inspired by image recollection during visual learning}
+    \Keywords{}
+\end{filecontents*}
 
 
 \begin{document}
     \include{titlepage.tex}
+    \include{dediquote.tex}
     \include{toc.tex}
     \include{abstract_en.tex}
     \include{abstract_it.tex}
@@ -135,5 +153,6 @@
     \include{CARSO.tex}
     \include{concl.tex}
     \include{biblio.tex}
-    %\include{ack.tex}  % Do not publish, for now... ;)
+    %\include{ack.tex}
+    \include{appendix.tex}
 \end{document}
