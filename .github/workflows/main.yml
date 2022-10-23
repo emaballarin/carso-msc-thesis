@@ -1,14 +1,34 @@
 name: PDFs from LaTeX
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 jobs:
   build_latex:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Fira fonts
+        run: |
+          PWDDIR="$(pwd)"
+          cd /tmp
+          sudo apt-get install unzip -y
+          wget "https://bboxtype.com/downloads/Fira/Download_Folder_FiraSans_4301.zip"
+          wget "https://bboxtype.com/downloads/Fira/Fira_Mono_3_2.zip"
+          unzip Download_Folder_FiraSans_4301.zip
+          unzip Fira_Mono_3_2.zip
+          sudo mkdir -p /usr/share/fonts/truetype/FiraSans
+          sudo mkdir -p /usr/share/fonts/opentype/FiraSans
+          cp Download_Folder_FiraSans_4301/Fonts/Fira_Sans_TTF_4301/*/*/*.ttf /usr/share/fonts/truetype/FiraSans/
+          cp Download_Folder_FiraSans_4301/Fonts/Fira_Sans_OTF_4301/*/*/*.otf /usr/share/fonts/opentype/FiraSans/
+          cp Fira_Mono_3_2/Fonts/FiraMono_WEB_32/*.ttf /usr/share/fonts/truetype/FiraSans
+          cp Fira_Mono_3_2/Fonts/FiraMono_OTF_32/*.otf /usr/share/fonts/truetype/FiraSans
+          rm Download_Folder_FiraSans_4301.zip Fira_Mono_3_2.zip
+          rm -rf Download_Folder_FiraSans_4301 Fira_Mono_3_2
+          sudo fc-cache -fv
+          fc-cache -fv
+          cd "$PWDDIR"
       - name: Set up Git repository
         uses: actions/checkout@v3
       - name: Get current date/time
@@ -22,6 +42,7 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: slides.tex
+          latexmk_use_lualatex: true
       - name: Copy-rename PDFs
         run: |
           cp thesis.pdf EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
