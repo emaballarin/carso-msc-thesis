@@ -1,0 +1,27 @@
+\setbeamertemplate{title page}{
+    \begin{minipage}[b][\paperheight]{\textwidth}
+        \ifx\inserttitlegraphic\@empty\else\usebeamertemplate*{title graphic}\fi
+        \vfill
+        \ifx\inserttitle\@empty\else\usebeamertemplate*{title}\fi
+        \ifx\insertsubtitle\@empty\else\usebeamertemplate*{subtitle}\fi
+        \usebeamertemplate*{title separator}
+        \vspace*{4px}
+        \begin{minipage}[]{0.5\textwidth}
+            \ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+        \end{minipage}
+        \begin{minipage}[]{0.5\textwidth}
+            \raggedleft
+            {\small Supervised by: Prof. Luca \textsc{Bortolussi}{${}^\dagger$} \par}
+            \vspace*{0.2em}
+            {\small CoSupervised by: Dr. Alessio \textsc{Ansuini }{${}^\ddagger$}}
+        \end{minipage}
+        \vspace*{12px}
+        \center\small Graduation session: M.Sc. in \textit{Data Science and Scientific Computing}
+        \center\ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
+        \vspace*{14px}
+        \raggedright\ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi
+        \vspace*{15px}
+    \end{minipage}
+}
+
+\frame{\titlepage}

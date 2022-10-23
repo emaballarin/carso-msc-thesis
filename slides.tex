@@ -1,0 +1,66 @@
+% !TeX spellcheck = en_GB
+\PassOptionsToPackage{implicit=true}{hyperref}
+\documentclass[10pt, aspectratio=1610, compress, protectframetitle, handout]{beamer}
+\usefonttheme{professionalfonts}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\usepackage[normalem]{ulem}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{datetime}
+\usepackage{textpos}
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[autostyle]{csquotes}
+\usepackage[export]{adjustbox}
+\MakeOuterQuote{"}
+\usepackage[]{enumitem}
+\usepackage{appendixnumberbeamer}
+\usepackage[british]{babel}
+\usepackage{wrapfig}
+\usetheme[titleformat=regular, sectionpage=progressbar, subsectionpage=none, numbering=fraction, progressbar=frametitle, block=fill]{metropolis}
+\setmonofont{FiraMono-Regular.otf}
+
+\graphicspath{{img/}}
+
+\definecolor{MetroLinks}{RGB}{96, 76, 56}
+\definecolor{MetroCite}{RGB}{35, 55, 59}
+\definecolor{MetroUrl}{RGB}{20, 176, 61}
+
+\hypersetup{
+    colorlinks,
+    linkcolor=MetroLinks,
+    citecolor=MetroCite,
+    urlcolor=MetroUrl,
+}
+
+% Change Colors/Width of Progress Bars
+\makeatletter
+\setlength{\metropolis@progressonsectionpage@linewidth}{3pt}
+\makeatother
+
+
+\title{\textsc{\texttt{C}ounter\texttt{A}dversarial \texttt{R}ecall of \texttt{S}ynthetic \texttt{O}bservations}}
+\subtitle{A \textit{neuro-inspired} approach to foil gradient-based adversarial attacks}
+\author{Emanuele \textsc{Ballarin}\inst{$\dagger$}}
+\institute[]{
+    \inst{$\dagger$} \scshape{\texttt{AICPS} $\in$ Dept. of Mathematics $\subseteq$ Univ. of Trieste} |
+    \inst{$\ddagger$} \scshape{\texttt{AREA} Science Park}
+}
+
+\AtBeginSection[]
+{
+    \begin{frame}
+        \frametitle{\textit{We are here}}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
+
+\begin{document}
+    \input{titleslide.tex}
+    \input{actual_slides.tex}
+    \input{closingslide.tex}
+\end{document}
