@@ -1,4 +1,4 @@
-name: PDF from LaTeX
+name: PDFs from LaTeX
 on:
   push:
     branches: [ "main" ]
@@ -14,22 +14,37 @@ jobs:
       - name: Get current date/time
         id: date
         run: echo "::set-output name=date::$(date +'%Y_%m_%d-%H_%M_%S')"
-      - name: Compile LaTeX document
+      - name: Compile LaTeX document (thesis)
         uses: xu-cheng/latex-action@v2
         with:
           root_file: thesis.tex
-      - name: Copy-rename PDF
+      - name: Compile LaTeX document (slides)
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: slides.tex
+      - name: Copy-rename PDFs
         run: |
           cp thesis.pdf EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
           mv thesis.pdf EmanueleBallarin_MScThesis_CARSO_latest.pdf
-      - name: Upload PDF as artifact (versioned)
+          cp slides.pdf EmanueleBallarin_MScThesisSlides_CARSO_${{ steps.date.outputs.date }}.pdf
+          mv slides.pdf EmanueleBallarin_MScThesisSlides_CARSO_latest.pdf
+      - name: Upload PDF as artifact (thesis, versioned)
         uses: actions/upload-artifact@v3
         with:
           name: EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}
           path: EmanueleBallarin_MScThesis_CARSO_${{ steps.date.outputs.date }}.pdf
-      # For easier use with https://nightly.link
-      - name: Upload PDF as artifact (unversioned, latest)
+      - name: Upload PDF as artifact (slides, versioned)
+        uses: actions/upload-artifact@v3
+        with:
+          name: EmanueleBallarin_MScThesisSlides_CARSO_${{ steps.date.outputs.date }}
+          path: EmanueleBallarin_MScThesisSlides_CARSO_${{ steps.date.outputs.date }}.pdf
+      - name: Upload PDF as artifact (thesis, unversioned, latest)
         uses: actions/upload-artifact@v3
         with:
           name: EmanueleBallarin_MScThesis_CARSO_latest
           path: EmanueleBallarin_MScThesis_CARSO_latest.pdf
+      - name: Upload PDF as artifact (slides, unversioned, latest)
+        uses: actions/upload-artifact@v3
+        with:
+          name: EmanueleBallarin_MScThesisSlides_CARSO_latest
+          path: EmanueleBallarin_MScThesisSlides_CARSO_latest.pdf
