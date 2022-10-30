@@ -1,3 +1,5 @@
+% !TeX spellcheck = en_GB
+
 \setbeamertemplate{title page}{
     \begin{minipage}[b][\paperheight]{\textwidth}
         \ifx\inserttitlegraphic\@empty\else\usebeamertemplate*{title graphic}\fi
@@ -8,6 +10,7 @@
         \vspace*{4px}
         \begin{minipage}[]{0.5\textwidth}
             \ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+            \vspace*{1.8em}
         \end{minipage}
         \begin{minipage}[]{0.5\textwidth}
             \raggedleft
@@ -15,7 +18,7 @@
             \vspace*{0.2em}
             {\small CoSupervised by: Dr. Alessio \textsc{Ansuini }{${}^\ddagger$}}
         \end{minipage}
-        \vspace*{12px}
+        \vspace*{7px}
         \center\small Graduation session: M.Sc. in \textit{Data Science and Scientific Computing}
         \center\ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
         \vspace*{14px}

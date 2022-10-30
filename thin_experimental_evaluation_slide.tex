@@ -1,0 +1,28 @@
+% !TeX spellcheck = en_GB
+\setcounter{footnote}{0}
+
+\begin{frame}{\protect{\emoji{test-tube}} Experimental results}
+    \vspace*{11px}
+
+    \centering
+    \begin{tabular}{@{}lllll@{}}
+        \toprule
+        Attack / Defence (\textit{adv. acc.\%})            & None           & \texttt{IAT}   & \texttt{CARSO} &   \\
+        \midrule
+        None                                               & \textbf{98.40} & 97.17          & 96.72          &   \\
+        \midrule
+        FGSM $\normof{\cdot}_2$, $\epsilon=0.15$           & 12.09          & 91.89          & \textbf{93.62} &   \\
+        FGSM $\normof{\cdot}_2$, $\epsilon=0.30$           & 01.21          & 76.94          & \textbf{86.43} &   \\
+        \midrule
+        (U) FGSM $\normof{\cdot}_2$, $\epsilon=0.50$       & 01.00          & 12.29          & \textbf{13.59} &   \\
+        \midrule
+        PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.15$     & 01.60          & 90.54          & \textbf{93.44} &   \\
+        PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.30$     & 06.85          & 71.26          & \textbf{86.27} &   \\
+        \midrule
+        (U) PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.50$ & \textit{20.66} & \textit{11.67} & \textbf{38.38} &   \\
+        \midrule
+        (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.15$  & 00.66          & 90.25          & \textbf{95.06} &   \\
+        (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.30$  & 00.00          & 60.54          & \textbf{93.31} &   \\
+        (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.50$  & 00.00          & 00.78          & \textbf{71.34} &   \\ \bottomrule
+    \end{tabular}
+\end{frame}

@@ -1,0 +1,52 @@
+% !TeX spellcheck = en_GB
+
+\begin{frame}{\protect{\emoji{robot}} Training \texttt{CARSO}}
+    \begin{minipage}[]{0.5\textwidth}
+        \vspace{0px}
+        \includegraphics[width=0.91\textwidth, height=0.95\textheight, keepaspectratio]{traindiag}
+    \end{minipage}
+    \begin{minipage}[]{0.45\textwidth}
+        \vspace{0pt}
+
+        \begin{center}
+            \underline{\textit{TL;DR:} Just a \textit{fancy \texttt{cVAE}}!}
+        \end{center}
+
+        Given an \textit{\alert{adversarially}-pretrained} classifier (for the problem of interest, and according to a given \textit{\alert{threat model}}):
+        \hfill\break
+        \begin{itemize}
+            \item First \textit{classification pass} for representation \alert{extraction};
+            \item Pre-encoding and \alert{rebalancing} of input \& representation;
+            \item As in \texttt{cVAE}, aiming at \textit{\alert{purified} input} reconstruction from any input.
+        \end{itemize}
+
+    \begin{block}{Requirements}
+        A dataset of \textit{clean/attacked} inputs to the classifier is needed (but \alert{no labels}!). Threat models may differ.
+    \end{block}
+
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{\protect{\emoji{robot}} Inference with \texttt{CARSO}}
+    \begin{minipage}[]{0.5\textwidth}
+        \vspace{0px}
+        \includegraphics[width=0.95\textwidth, height=0.95\textheight, keepaspectratio]{inferdiag}
+    \end{minipage}
+    \begin{minipage}[]{0.45\textwidth}
+\vspace{0pt}
+
+\begin{center}
+    \underline{\textit{TL;DR:} Condition, sample, classify, aggregate!}
+\end{center}
+
+Given the same \textit{adversarially-pretrained} classifier, the just-trained \textit{representation pre-compressor} and \textit{decoder}:
+\hfill\break
+\begin{itemize}
+    \item First \textit{classification pass} for representation \alert{extraction};
+    \item Representation \textit{pre-encoding};
+    \item \alert{Repeated sampling} of \textit{candidate purified inputs};
+    \item Second classification pass on such reconstructions, for \alert{actual classification};
+    \item \alert{Aggregation} of results.
+\end{itemize}
+\end{minipage}
+\end{frame}

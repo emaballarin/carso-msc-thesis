@@ -1,0 +1,74 @@
+% !TeX spellcheck = en_GB
+
+\section{\protect{\emoji{test-tube}} Experimental evaluation}{
+
+    \setcounter{footnote}{0}
+
+    \begin{frame}{\protect{\emoji{test-tube}} Experiment setup (I)}
+    \underline{General goal}: \alert{accurate} -- but \textit{\alert{narrow}-scoped} -- investigation; beyond \textit{proof-of-concept}, not\\\hphantom{\underline{General goal}: }extensive. Focus on \alert{image classification} tasks.
+
+    \underline{\textit{Foreseen attacks}}: whole-\alert{dataset} \texttt{FGSM} ($\normof{\cdot}_2$), \texttt{PGD} ($\normof{\cdot}_{\infty}$); various strengths\\\hphantom{\underline{\textit{Foreseen attacks}} } ($\epsilon=0.15$, $\epsilon=0.30$ \footnote{On normalised data, $\epsilon=0.30$ is considered a sort of \textit{reasonable} upper limit!}).
+
+    \underline{\textit{Unforeseen attacks}}: whole-\alert{test}-set \texttt{DeepFool}, various strengths\\\hphantom{\textit{Unforeseen attacks}: } ($\epsilon=0.15$, $\epsilon=0.30$, $\epsilon=0.50$); \texttt{FGSM} ($\normof{\cdot}_2$), \texttt{PGD} ($\normof{\cdot}_{\infty}$), fixed\\\hphantom{\textit{Unforeseen attacks}: } strength ($\epsilon=0.50$).
+
+    \underline{Classifier}: \textit{\alert{Fully-connected feedforward}} with $3$ hidden layers, \texttt{Mish} activation, \textit{BatchNorm},\\\hphantom{\underline{Classifier}: } $\sim0.15$-dropout. Representation size: \alert{$290$}; trainable parameters: $\sim17.5$k.\\\hphantom{\underline{Classifier}: } Trained with \texttt{RAdam}, $\lambda_{\text{init}}=0.05$; $300$ epochs, reducing \textit{l.r.} on plateaus.\\\hphantom{\underline{Classifier}: } Loss: \textit{one-hot class similarity} $L_2$.
+    \end{frame}
+
+    \setcounter{footnote}{0}
+
+    \begin{frame}{\protect{\emoji{test-tube}} Experiment setup (II)}
+
+        \underline{\texttt{cVAE} parts}: \textit{Fully-connected feedforward}, \textit{deep} but as shallow as possible within\\\hphantom{\underline{\texttt{cVAE} parts}: }reasonable reconstruction similarity. Trainable parameters: $\netw{E}_{\text{DRI}}$: $\sim0.5\text{m}$,\\\hphantom{\underline{\texttt{cVAE} parts}: }\alert{$\netw{E}_{\text{DRR}}$: $\sim61\text{k}$}, $\netw{E}$: $\sim80\text{k}$, $\mu$/$\sigma$ layers: $\sim5.3\text{k}$ each, \alert{$\netw{D}$: $\sim2.1\text{m}$}. \textit{Leaky \texttt{ReLU}} act.\\\hphantom{\underline{\texttt{cVAE} parts}: }Trained with \texttt{RAdam}, $\lambda_{\text{init}}=0.001$; $300$ epochs, reducing \textit{l.r.} on plateaus.\\\hphantom{\underline{\texttt{cVAE} parts}: }Loss: \textit{pixelwise binary cross-entropy}.\\\hphantom{\underline{\texttt{cVAE} parts}: }Inference-time number of samples: $1500$, \textit{mode-class} aggregated.
+
+        \hfill\break
+
+        \underline{Other hyperparameters}: Batch size: $256$; Number of neurons in hidden layers:\\\hphantom{Other hyperparameters: }\textit{funnel-like, programmatically generated}. Very little\\\hphantom{Other hyperparameters: }experimentation \wrt hyperparameter tuning.
+
+        \hfill\break
+        \begin{center}
+            \protect{\emoji{drum}}
+        \end{center}
+
+
+    \end{frame}
+
+    \begin{frame}{\protect{\emoji{test-tube}} Results}
+        \vspace*{11px}
+        "There's nothing like the sheer power of numbers to scrub away layers of confusion and contradiction."{\hfill}(--- \textsc{S. Levitt   }, economist)\hspace{0.75cm}
+        \vspace*{8px}
+
+        \centering
+        \begin{tabular}{@{}lllll@{}}
+            \toprule
+            Attack / Defence (\textit{adv. acc.\%})            & None           & \texttt{IAT}   & \texttt{CARSO} &   \\
+            \midrule
+            None                                               & \textbf{98.40} & 97.17          & 96.72          &   \\
+            \midrule
+            FGSM $\normof{\cdot}_2$, $\epsilon=0.15$           & 12.09          & 91.89          & \textbf{93.62} &   \\
+            FGSM $\normof{\cdot}_2$, $\epsilon=0.30$           & 01.21          & 76.94          & \textbf{86.43} &   \\
+            \midrule
+            (U) FGSM $\normof{\cdot}_2$, $\epsilon=0.50$       & 01.00          & 12.29          & \textbf{13.59} &   \\
+            \midrule
+            PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.15$     & 01.60          & 90.54          & \textbf{93.44} &   \\
+            PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.30$     & 06.85          & 71.26          & \textbf{86.27} &   \\
+            \midrule
+            (U) PGD $\normof{\cdot}_{\infty}$, $\epsilon=0.50$ & \textit{20.66} & \textit{11.67} & \textbf{38.38} &   \\
+            \midrule
+            (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.15$  & 00.66          & 90.25          & \textbf{95.06} &   \\
+            (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.30$  & 00.00          & 60.54          & \textbf{93.31} &   \\
+            (U) DF $\normof{\cdot}_{\infty}$, $\epsilon=0.50$  & 00.00          & 00.78          & \textbf{71.34} &   \\ \bottomrule
+        \end{tabular}
+    \end{frame}
+
+    \begin{frame}{\protect{\emoji{test-tube}} Ablation studies}
+    Many \alert{ablation studies} have been performed, both during model development and after the final architecture was completely determined. Namely:
+
+    \begin{itemize}
+        \item \textit{On the necessity of adversarial training} $\rightarrow$ $\sim 15$-$25\%$ \textit{adversarial accuracy} \alert{($\sim100\times$)};
+        \item On the number of purified samples $\rightarrow$ $>1500$;
+        \item On the number of layers in the \texttt{cVAE} network $\rightarrow$ \textit{by incremental construction};
+        \item On the number of training epochs $\rightarrow$ Indeed, might be as low as $60$ (FCN) and\\\hphantom{On the number of training epochs $\rightarrow$ }$100$ (\texttt{CARSO}), but requiring \alert{accurate scheduling};
+        \item On the choice of the optimiser $\rightarrow$ No improvement, slight loss increase at\\\hphantom{On the choice of the optimiser $\rightarrow$} convergence.
+    \end{itemize}
+    \end{frame}
+}

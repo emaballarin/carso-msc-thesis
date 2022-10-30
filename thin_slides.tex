@@ -1,0 +1,113 @@
+% !TeX spellcheck = en_GB
+
+\PassOptionsToPackage{implicit=true}{hyperref}
+
+\documentclass[10pt, aspectratio=1610, compress, protectframetitle, handout]{beamer}
+\usefonttheme{professionalfonts}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\usepackage[normalem]{ulem}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{datetime}
+\usepackage{textpos}
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{mathtools}
+\usepackage[autostyle]{csquotes}
+\usepackage[export]{adjustbox}
+
+\MakeOuterQuote{"}
+
+\usepackage{appendixnumberbeamer}
+\usepackage[british]{babel}
+\usepackage{wrapfig}
+\usepackage{emoji}
+
+\usetheme[titleformat=regular, sectionpage=progressbar, subsectionpage=none, numbering=fraction, progressbar=frametitle, block=fill]{metropolis}
+\setmonofont{FiraMono-Regular.otf}
+
+\graphicspath{{img/}}
+
+\definecolor{MetroLinks}{RGB}{96, 76, 56}
+\definecolor{MetroCite}{RGB}{35, 55, 59}
+\definecolor{MetroUrl}{RGB}{20, 176, 61}
+
+\hypersetup{
+    colorlinks,
+    linkcolor=MetroLinks,
+    citecolor=MetroCite,
+    urlcolor=MetroUrl,
+}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\kldiv}{\text{KL}}
+\newcommand{\cardof}[1]{|#1|}
+\newcommand{\condon}{|}
+\newcommand{\ddiff}[1]{\mathop{d#1}}
+\newcommand{\dimof}[1]{\text{dim}(#1)}
+\newcommand{\dpart}[1]{\mathop{\partial#1}}
+\newcommand{\fullstop}{\text{ .}}
+\newcommand{\mat}[1]{\bm{#1}}
+\newcommand{\netw}[1]{\mathcal{#1}}
+\newcommand{\normof}[1]{||#1||}
+\newcommand{\suchthat}{\textit{s.t.\ }}
+\newcommand{\etc}{\textit{etc.\ }}
+\newcommand{\wlogg}{\textit{w.l.o.g.\ }}
+\newcommand{\wrt}{\textit{w.r.t.\ }}
+\renewcommand{\vec}[1]{\bm{#1}}
+\newcommand{\carso}{\texttt{CARSO}\ }
+
+% Change Colors/Width of Progress Bars
+\makeatletter
+\setlength{\metropolis@progressonsectionpage@linewidth}{3pt}
+\makeatother
+
+% Quoting tools
+\let\oldquote\quote
+\let\endoldquote\endquote
+\renewenvironment{quote}[2][]
+{\if\relax\detokenize{#1}\relax
+    \def\quoteauthor{#2}%
+    \else
+    \def\quoteauthor{#2~---~#1}%
+    \fi
+    \oldquote}
+{\par\nobreak\smallskip\hfill(\quoteauthor)%
+    \endoldquote\addvspace{\bigskipamount}}
+
+
+\title{\textsc{\texttt{C}ounter\texttt{A}dversarial \texttt{R}ecall of \texttt{S}ynthetic \texttt{O}bservations}}
+\subtitle{A \textit{neuro-inspired} approach to foil gradient-based adversarial attacks}
+\author{Emanuele \textsc{Ballarin}\inst{$\dagger$}}
+\institute[]{
+    \inst{$\dagger$} \scshape{\texttt{AICPS} $\in$ Dept. of Mathematics $\subseteq$ Univ. of Trieste} |
+    \inst{$\ddagger$} \scshape{\texttt{AREA} Science Park}
+}
+
+\addtobeamertemplate{frametitle}{}{%
+    \begin{textblock*}{100mm}(0.8\textwidth,-0.94cm)
+        \hspace{10px}
+        \includegraphics[valign=c, height=0.4cm]{logo_adsai_bw_scaled}
+        \hspace{3px}
+        \includegraphics[valign=c, height=0.4cm]{logo_dssc_white}
+        \hspace{2px}
+        \includegraphics[valign=c, height=0.45cm]{logo_units_white}
+\end{textblock*}}
+
+\begin{document}
+    \input{titleslide.tex}
+    \input{thin_initial_filler_slide.tex}
+    \input{thin_the_prob_of_adv_rob.tex}
+    \input{thin_robust_neural_systems_brains.tex}
+    \input{thin_carso_artificial_neural_introspective.tex}
+    \input{thin_experimental_evaluation_slide.tex}
+    \input{thin_discussion_slide.tex}
+    \input{thin_conclusion_future_slide.tex}
+    \input{thin_closingslide.tex}
+\end{document}
